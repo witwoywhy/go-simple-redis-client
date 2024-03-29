@@ -25,13 +25,13 @@ func main() {
 	wg.Add(1)
 	go read(conn, &wg)
 
-	conn.Write(makeCmd([]string{"AUTH", password}))
+	conn.Write(makeCmd("AUTH", password))
 
-	conn.Write(makeCmd([]string{"SET", "TRY_SET", "THIS IS FOR SET"}))
-	conn.Write(makeCmd([]string{"GET", "TRY_SET"}))
+	conn.Write(makeCmd("SET", "TRY_SET", "THIS IS FOR SET"))
+	conn.Write(makeCmd("GET", "TRY_SET"))
 
-	conn.Write(makeCmd([]string{"INCR", "TRY_INCR"}))
-	conn.Write(makeCmd([]string{"GET", "TRY_INCR"}))
+	conn.Write(makeCmd("INCR", "TRY_INCR"))
+	conn.Write(makeCmd("GET", "TRY_INCR"))
 
 	wg.Wait()
 }
@@ -51,7 +51,7 @@ func read(conn net.Conn, wg *sync.WaitGroup) {
 	}
 }
 
-func makeCmd(cmds []string) []byte {
+func makeCmd(cmds ...string) []byte {
 	var buffer bytes.Buffer
 	buffer.WriteString("*")
 	buffer.WriteString(strconv.Itoa(len(cmds)))
